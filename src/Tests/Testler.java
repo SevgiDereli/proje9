@@ -2,6 +2,7 @@ package Tests;
 
 import Utilities.BaseDriver;
 import Utilities.MyFunc;
+import com.github.javafaker.Faker;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -11,6 +12,8 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 public class Testler extends BaseDriver {
+
+
 
     @Test(priority = 1)
     public void LoginTest() {
@@ -66,27 +69,29 @@ public class Testler extends BaseDriver {
             Assert.assertTrue(altMenuler.size() > 0, menuName + " altında eleman bulunamadı!");
             System.out.println(menuName + " başarıyla doğrulandı.\n------------------");
         }
-        BekleKapat();
-        KalanOncekileriKapat();
+//        BekleKapat();
+//        KalanOncekileriKapat();
     }
 
 
+    Faker randomUreteci = new Faker();
+    String firstName = randomUreteci.address().firstName();
+    String lastName = randomUreteci.address().lastName();
+    String email = randomUreteci.internet().emailAddress();
+    String password = randomUreteci.internet().password();
 
-    int rastgeleSayi = (int) (Math.random() * 100000);
-    String yeniEmail = "zeynep" + rastgeleSayi + "@gmail.com";
-    @Test(dependsOnMethods = {"LeftNawMenuTest"})
-
-    public void CreateCustomer() {
+    @Test()
+    public void CreateCustomerTest() {
         Elements elements = new Elements(driver);
         elements.loginButton.click();
-        MyFunc.bekle(10);//wait.until kullanmamız lazım
+        MyFunc.bekle(10);
         elements.customers.click();
         elements.customerList.click();
         elements.addNewButton.click();
-        elements.email.sendKeys(yeniEmail);//faker kullanmamız lazım
-        elements.password.sendKeys("123456");
-        elements.firstName.sendKeys("ben");
-        elements.lastName.sendKeys("test değilim");
+        elements.email.sendKeys(email);//faker kullanmamız lazım
+        elements.password.sendKeys(password);
+        elements.firstName.sendKeys(firstName);
+        elements.lastName.sendKeys(lastName);
         elements.genderFemale.click();
         elements.companyName.sendKeys("easyLearn");
         elements.saveButton.click();
@@ -98,22 +103,20 @@ public class Testler extends BaseDriver {
     }
 
 
-    @Test(dependsOnMethods = {"CreateCustomerTest"})//yiğit
-    public void EditCustomerTest() {
-Elements elements=new Elements(driver);
-elements.customers.click();
+    @Test(dependsOnMethods = {"CreateCustomerTest"})
+    public void EditCustomerTest() { // yiğit
 
 
     }
 
     @Test(dependsOnMethods = {"EditCustomerTest"})
-    public void DeleteCustomerTest() {
+    public void DeleteCustomerTest() { // burak
 
 
     }
 
     @Test(dependsOnMethods = {"DeleteCustomerTest"})
-    public void SearchTest() {
+    public void SearchTest() { // sevgi
 
 
     }
