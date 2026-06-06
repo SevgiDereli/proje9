@@ -27,6 +27,25 @@ public class Elements {
     @FindBy(css = "ul[role='menu'] > li.nav-item.has-treeview")
     public List<WebElement> anaMenuler;
 
+    //zeynep ben
+    @FindBy(linkText = "Customers")
+    public WebElement customers;
+    @FindBy(xpath = "/html/body/div[3]/aside/div/nav/ul/li[4]/ul/li[1]/a")
+    public WebElement customerList;
+    @FindBy(linkText = "Add new")
+    public WebElement addNewButton;
+    @FindBy(id = "FirstName")
+    public WebElement firstName;
+    @FindBy(id = "LastName")
+    public WebElement lastName;
+    @FindBy(id = "Gender_Female")
+    public WebElement genderFemale;
+    @FindBy(id = "Company")
+    public WebElement companyName;
+    @FindBy(css = "[class=float-right]>button")
+    public WebElement saveButton;
+    @FindBy(xpath = "//*[@id='admin-notifications']/div")
+    public WebElement customerSucces;
 
 
 
