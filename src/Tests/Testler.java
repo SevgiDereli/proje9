@@ -71,11 +71,32 @@ public class Testler extends BaseDriver {
     }
 
 
+
+    int rastgeleSayi = (int) (Math.random() * 100000);
+    String yeniEmail = "zeynep" + rastgeleSayi + "@gmail.com";
     @Test(dependsOnMethods = {"LeftNawMenuTest"})
-    public void CreateCustomerTest() {
 
-
+    public void CreateCustomer() {
+        Elements elements = new Elements(driver);
+        elements.loginButton.click();
+        MyFunc.bekle(10);//wait.until kullanmamız lazım
+        elements.customers.click();
+        elements.customerList.click();
+        elements.addNewButton.click();
+        elements.email.sendKeys(yeniEmail);//faker kullanmamız lazım
+        elements.password.sendKeys("123456");
+        elements.firstName.sendKeys("ben");
+        elements.lastName.sendKeys("test değilim");
+        elements.genderFemale.click();
+        elements.companyName.sendKeys("easyLearn");
+        elements.saveButton.click();
+        String gelenMesaj = elements.customerSucces.getText();
+        bekle.until(ExpectedConditions.urlContains("https://admin-demo.nopcommerce.com/Admin/Customer/List"));
+        bekle.until(ExpectedConditions.visibilityOf(elements.customerSucces));
+        Assert.assertTrue(gelenMesaj.contains("The new customer has been added successfully."),
+                "Müşteri ekleme mesajı hatalı! Gelen Mesaj: " + gelenMesaj);
     }
+
 
     @Test(dependsOnMethods = {"CreateCustomerTest"})
     public void EditCustomerTest() {
