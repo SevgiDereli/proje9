@@ -16,7 +16,7 @@ import java.time.Duration;
 import java.util.List;
 
 public class BaseDriver {
-    public  WebDriver driver = new ChromeDriver();
+    public  WebDriver driver ;
 
     public  WebDriverWait bekle;
 
