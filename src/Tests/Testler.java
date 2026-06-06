@@ -98,8 +98,10 @@ public class Testler extends BaseDriver {
     }
 
 
-    @Test(dependsOnMethods = {"CreateCustomerTest"})
+    @Test(dependsOnMethods = {"CreateCustomerTest"})//yiğit
     public void EditCustomerTest() {
+Elements elements=new Elements(driver);
+elements.customers.click();
 
 
     }
