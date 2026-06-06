@@ -107,6 +107,7 @@ public class Testler extends BaseDriver {
     public void EditCustomerTest() { // yiğit
 
         Elements elements = new Elements(driver);
+        elements.customers.click();
     }
 
     @Test(dependsOnMethods = {"EditCustomerTest"})
