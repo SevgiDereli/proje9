@@ -4,6 +4,8 @@ import Utilities.BaseDriver;
 import Utilities.MyFunc;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -29,48 +31,21 @@ public class Testler extends BaseDriver {
     @Test(dependsOnMethods = {"LoginTest"})
     public void LeftNawMenuTest() {
         Elements elements = new Elements(driver);
-        Actions actions = new Actions(driver);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
 
-        for (int i = 0; i < elements.anaMenuler.size(); i++) {
-            WebElement menuBlock = elements.anaMenuler.get(i);
-
-            // Görünmeyen, boyutu sıfır olan gizli elementleri pas geçiyoruz (Hata almayı engeller)
-            if (!menuBlock.isDisplayed()) {
-                continue;
+        for (WebElement e : elements.anaMenuList) {
+            e.click();
+            WebElement menuAdi= e.findElement(By.xpath("a/p"));
+            try {
+                bekle.until(ExpectedConditions.attributeContains(e,"class","menu-open"));
             }
-
-            WebElement menuLink = menuBlock.findElement(By.tagName("a"));
-            String menuName = menuLink.getText().trim();
-
-            // Eğer başlık boş kalmışsa veya Dashboard ise atla
-            if (menuName.isEmpty() || menuName.equalsIgnoreCase("Dashboard")) {
-                continue;
+            catch (TimeoutException ex){
+                Assert.fail(menuAdi.getText()+" menüsünü açma başarısız oldu.");
             }
-
-            System.out.println("Kontrol Edilen Menü: " + menuName);
-
-            // Hover ve Tıklama aksiyonu
-            actions.moveToElement(menuLink).click().build().perform();
-
-            Assert.assertTrue(menuLink.isDisplayed(), menuName + " görünür değil!");
-
-            // Sadece o ana menüye ait alt elemanları listeler
-            List<WebElement> altMenuler = menuBlock.findElements(By.cssSelector("ul.nav-treeview > li"));
-
-            System.out.println(menuName + " altındaki eleman sayısı: " + altMenuler.size());
-            for (WebElement sub : altMenuler) {
-                String subText = sub.getText().trim();
-                // Eğer alt eleman metni boş değilse yazdır
-                if (!subText.isEmpty()) {
-                    System.out.println("  -> Alt Eleman: " + subText);
-                }
-            }
-
-            Assert.assertTrue(altMenuler.size() > 0, menuName + " altında eleman bulunamadı!");
-            System.out.println(menuName + " başarıyla doğrulandı.\n------------------");
+            js.executeScript("arguments[0].scrollIntoView(true);", e);
+            List<WebElement> li= e.findElements(By.xpath("ul/li"));
+            Assert.assertTrue(!li.isEmpty(),menuAdi.getText()+" altında menü bulunamadı.");
         }
-//        BekleKapat();
-//        KalanOncekileriKapat();
     }
 
 
