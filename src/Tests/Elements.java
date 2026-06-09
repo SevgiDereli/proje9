@@ -23,9 +23,9 @@ public class Elements {
     @FindBy(xpath = "//h1[contains(text(),'Dashboard')]")
     public WebElement dashboard;
 
-    // Sadece en dıştaki ana menü bloklarını seçer (İçteki alt menülerin li'lerini listeye karıştırmaz)
-    @FindBy(css = "ul[role='menu'] > li.nav-item.has-treeview")
-    public List<WebElement> anaMenuler;
+    //toktay
+    @FindBy(xpath = "//ul[@class='nav nav-pills nav-sidebar flex-column nav-legacy']/li[@class='nav-item has-treeview']")
+    public List<WebElement> anaMenuList;
 
     //zeynep ben
     @FindBy(linkText = "Customers")
