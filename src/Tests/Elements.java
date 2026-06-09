@@ -27,7 +27,7 @@ public class Elements {
     @FindBy(xpath = "//ul[@class='nav nav-pills nav-sidebar flex-column nav-legacy']/li[@class='nav-item has-treeview']")
     public List<WebElement> anaMenuList;
 
-    //zeynep ben
+    //zeynep (Create Customer)
     @FindBy(linkText = "Customers")
     public WebElement customers;
     @FindBy(xpath = "/html/body/div[3]/aside/div/nav/ul/li[4]/ul/li[1]/a")
@@ -47,7 +47,22 @@ public class Elements {
     @FindBy(xpath = "//*[@id='admin-notifications']/div")
     public WebElement customerSucces;
 
-
+    // Edit Customer
+//    @FindBy(xpath = "//a[@href='/Admin/Customer/List']//p[contains(text(),'Customers')]")
+//    public WebElement customerMenu;
+    @FindBy(id = "SearchEmail")
+    public WebElement searchEmail;
+    @FindBy(id = "SearchFirstName")
+    public WebElement searchFirstName;
+    @FindBy(id = "SearchLastName")
+    public WebElement searchLastName;
+    @FindBy(id = "search-customers")
+    public WebElement searchButton;
+    @FindBy(name = "save")
+    public WebElement saveEditButton;
+    @FindBy(xpath = "//div[@class='documentation-reference']//span[1]")
+    public WebElement editBolumu;
 
 
 }
+
