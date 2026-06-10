@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<suite name="Proje 9 test sureci">
+
+    <test name="MyTest">
+        <classes>
+            <class name="Tests.Testler">
+                <methods>
+                    <include name="LoginTest" />
+                    <include name="LeftNawMenuTest" />
+                    <include name="CreateCustomerTest" />
+                    <include name="EditCustomerTest" />
+                    <include name="DeleteCustomerTest" />
+                    <include name="SearchTest" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+
+</suite>

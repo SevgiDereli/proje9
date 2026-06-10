@@ -24,8 +24,6 @@ public class Testler extends BaseDriver {
         MyFunc.bekle(5); // sayfanın yüklenmesi için bekle, yoksa hata veriyor
         bekle.until(ExpectedConditions.visibilityOf(elements.dashboard));
         Assert.assertEquals(elements.dashboard.getText().trim(), "Dashboard", "login başarısız.");
-//        BekleKapat();
-//        KalanOncekileriKapat();
     }
 
     @Test(dependsOnMethods = {"LoginTest"})
@@ -48,12 +46,12 @@ public class Testler extends BaseDriver {
     }
 
 
-    public static String firstName;
-    public static String lastName;
-    public static String email;
-    public static String password;
+    public  String firstName;
+    public  String lastName;
+    public  String email;
+    public  String password;
 
-    @Test()// depends on method ekle
+    @Test(dependsOnMethods = {"LeftNawMenuTest"})
     public void CreateCustomerTest() { // zeynep
         Faker randomUreteci = new Faker();
         firstName = randomUreteci.name().firstName(); // address yerine name daha doğru olur
@@ -62,7 +60,7 @@ public class Testler extends BaseDriver {
         password = randomUreteci.internet().password();
 
         Elements elements = new Elements(driver);
-        elements.loginButton.click(); // sonrada sil
+//        elements.loginButton.click(); // sonrada sil
         MyFunc.bekle(10);
         elements.customers.click();
         elements.customerList.click();
@@ -132,7 +130,7 @@ public class Testler extends BaseDriver {
     @Test(dependsOnMethods = {"EditCustomerTest"})
     public void DeleteCustomerTest() { // burak
         Elements elements = new Elements(driver);
-        elements.loginButton.click(); // sonradan sil
+//        elements.loginButton.click(); // sonradan sil
         MyFunc.bekle(10);
         elements.customers.click();
         elements.customerList.click();
@@ -153,6 +151,8 @@ public class Testler extends BaseDriver {
     @Test(dependsOnMethods = {"DeleteCustomerTest"})
     public void SearchTest() { // yiğit
 
-
+//        BekleKapat();
+//        KalanOncekileriKapat();
     }
+
 }
