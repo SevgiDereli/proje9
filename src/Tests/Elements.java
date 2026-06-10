@@ -47,9 +47,7 @@ public class Elements {
     @FindBy(xpath = "//*[@id='admin-notifications']/div")
     public WebElement customerSucces;
 
-    // Edit Customer
-//    @FindBy(xpath = "//a[@href='/Admin/Customer/List']//p[contains(text(),'Customers')]")
-//    public WebElement customerMenu;
+    // Edit Customer (Sevgi)
     @FindBy(id = "SearchEmail")
     public WebElement searchEmail;
     @FindBy(id = "SearchFirstName")

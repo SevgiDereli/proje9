@@ -29,7 +29,7 @@ public class Testler extends BaseDriver {
     }
 
     @Test(dependsOnMethods = {"LoginTest"})
-    public void LeftNawMenuTest() {
+    public void LeftNawMenuTest() { // tuğçe
         Elements elements = new Elements(driver);
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
@@ -53,8 +53,8 @@ public class Testler extends BaseDriver {
     public static String email;
     public static String password;
 
-    @Test()
-    public void CreateCustomerTest() {// depends on method ekle
+    @Test()// depends on method ekle
+    public void CreateCustomerTest() { // zeynep
         Faker randomUreteci = new Faker();
         firstName = randomUreteci.name().firstName(); // address yerine name daha doğru olur
         lastName = randomUreteci.name().lastName();
@@ -83,7 +83,7 @@ public class Testler extends BaseDriver {
 
 
     @Test(dependsOnMethods = {"CreateCustomerTest"})
-    public void EditCustomerTest() {
+    public void EditCustomerTest() { // sevgi
         Elements elements = new Elements(driver);
 //        elements.customers.click();
 //        elements.customerMenu.click();   // createtestinden dan açık kalıyor sayfa
@@ -132,7 +132,7 @@ public class Testler extends BaseDriver {
     @Test(dependsOnMethods = {"EditCustomerTest"})
     public void DeleteCustomerTest() { // burak
         Elements elements = new Elements(driver);
-        elements.loginButton.click();
+        elements.loginButton.click(); // sonradan sil
         MyFunc.bekle(10);
         elements.customers.click();
         elements.customerList.click();
@@ -151,7 +151,7 @@ public class Testler extends BaseDriver {
     }
 
     @Test(dependsOnMethods = {"DeleteCustomerTest"})
-    public void SearchTest() { // sevgi
+    public void SearchTest() { // yiğit
 
 
     }
