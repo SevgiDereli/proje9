@@ -28,7 +28,7 @@ public class Elements {
     public List<WebElement> anaMenuList;
 
     //zeynep (Create Customer)
-    @FindBy(linkText = "Customers")
+    @FindBy(linkText = "Customers") // xpath--> //p[contains(text(),'Customers')] [1]
     public WebElement customers;
     @FindBy(xpath = "/html/body/div[3]/aside/div/nav/ul/li[4]/ul/li[1]/a")
     public WebElement customerList;
@@ -62,6 +62,12 @@ public class Elements {
     public WebElement saveEditButton;
     @FindBy(xpath = "//div[@class='documentation-reference']//span[1]")
     public WebElement editBolumu;
+
+    // Delete Customer <-- BUrak -->
+    @FindBy(xpath = "//tbody/tr[1]/td[7]/a[1]") public WebElement customerEdit;
+    @FindBy(className = "fa-trash-can") public WebElement deleteCustomer;
+    @FindBy(css = ".btn-danger:nth-child(2)") public WebElement alertDeleteBtn;
+    @FindBy(xpath = "//*[@id='admin-notifications']/div") public WebElement deleteSuccess;
 
 
 }
