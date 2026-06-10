@@ -131,6 +131,21 @@ public class Testler extends BaseDriver {
 
     @Test(dependsOnMethods = {"EditCustomerTest"})
     public void DeleteCustomerTest() { // burak
+        Elements elements = new Elements(driver);
+        elements.loginButton.click();
+        MyFunc.bekle(10);
+        elements.customers.click();
+        elements.customerList.click();
+        elements.customerEdit.click();
+        elements.deleteCustomer.click();
+        elements.alertDeleteBtn.click();
+
+        bekle.until(ExpectedConditions.urlContains("https://admin-demo.nopcommerce.com/Admin/Customer/List"));
+        bekle.until(ExpectedConditions.visibilityOf(elements.deleteSuccess));
+
+        String deleteMesaj = elements.deleteSuccess.getText();
+        Assert.assertTrue(deleteMesaj.contains("The customer has been deleted successfully."),
+                "Müşteri silme işlemi başarısız oldu!.. Geçmiş olsun...  Gelen Mesaj: " + deleteMesaj);
 
 
     }
