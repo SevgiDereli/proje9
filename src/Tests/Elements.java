@@ -47,7 +47,10 @@ public class Elements {
     @FindBy(xpath = "//*[@id='admin-notifications']/div")
     public WebElement customerSucces;
 
-
+    //search Test
+    @FindBy(xpath = "//input[@type='text']") public WebElement searchBox;
+    @FindBy(xpath = "//*[@id='search-box']/span/div") public WebElement searchBox2;
+    @FindBy(xpath = "//h1[normalize-space()='Shipments']") public WebElement shipmentsTitle;
 
 
 }

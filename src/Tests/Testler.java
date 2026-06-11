@@ -4,15 +4,17 @@ import Utilities.BaseDriver;
 import Utilities.MyFunc;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.security.Key;
 import java.util.List;
 
 public class Testler extends BaseDriver {
-
 
 
     @Test(priority = 1)
@@ -115,8 +117,17 @@ public class Testler extends BaseDriver {
 
     }
 
-    @Test(dependsOnMethods = {"DeleteCustomerTest"})
-    public void SearchTest() { // sevgi
+    @Test//(dependsOnMethods = {"DeleteCustomerTest"})
+    public void SearchTest() { // yiğit
+
+        Elements elements = new Elements(driver);
+        elements.loginButton.click();
+        MyFunc.bekle(10);
+        bekle.until(ExpectedConditions.visibilityOf(elements.dashboard));
+        elements.searchBox.sendKeys("Shipments");
+        elements.searchBox2.click();
+        String baslik = elements.shipmentsTitle.getText();
+        Assert.assertTrue(baslik.contains("Shipments"),"arama basarısı oldu");
 
 
     }
