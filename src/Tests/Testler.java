@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 public class Testler extends BaseDriver {
-
+//    Elements elements = new Elements(driver); --> bu şekilde çalışmıyor
 
     @Test(priority = 1)
     public void LoginTest() {
@@ -46,10 +46,10 @@ public class Testler extends BaseDriver {
     }
 
 
-    public  String firstName;
-    public  String lastName;
-    public  String email;
-    public  String password;
+    public String firstName;
+    public String lastName;
+    public String email;
+    public String password;
 
     @Test(dependsOnMethods = {"LeftNawMenuTest"})
     public void CreateCustomerTest() { // zeynep
@@ -60,8 +60,6 @@ public class Testler extends BaseDriver {
         password = randomUreteci.internet().password();
 
         Elements elements = new Elements(driver);
-//        elements.loginButton.click(); // sonrada sil
-        MyFunc.bekle(10);
         elements.customers.click();
         elements.customerList.click();
         elements.addNewButton.click();
@@ -83,8 +81,6 @@ public class Testler extends BaseDriver {
     @Test(dependsOnMethods = {"CreateCustomerTest"})
     public void EditCustomerTest() { // sevgi
         Elements elements = new Elements(driver);
-//        elements.customers.click();
-//        elements.customerMenu.click();   // createtestinden dan açık kalıyor sayfa
         elements.searchEmail.sendKeys(email);
         elements.searchFirstName.sendKeys(firstName);
         elements.searchLastName.sendKeys(lastName);
@@ -113,8 +109,8 @@ public class Testler extends BaseDriver {
                 "Müşteri güncelleme mesajı hatalı! Gelen Mesaj: " + gelenMesaj);
 
         System.out.println("Müşteri Başarıyla Güncellendi ve Doğrulandı!");
-    }
 
+    }
     public WebElement getSearchDogrulama(String email) { // Faker doğrulama için yapıldı.
         String dinamikXpath = String.format("//table[@id='customers-grid']//td[text()='%s']", email);
         return driver.findElement(By.xpath(dinamikXpath));
@@ -124,19 +120,21 @@ public class Testler extends BaseDriver {
         String dinamikXpath = String.format
                 ("//table[@id='customers-grid']//td[text()='%s']/following-sibling::td[@class='button-column']/a", email);
         return driver.findElement(By.xpath(dinamikXpath));
+
     }
 
 
     @Test(dependsOnMethods = {"EditCustomerTest"})
     public void DeleteCustomerTest() { // burak
         Elements elements = new Elements(driver);
-//        elements.loginButton.click(); // sonradan sil
-        MyFunc.bekle(10);
-        elements.customers.click();
-        elements.customerList.click();
-        elements.customerEdit.click();
-        elements.deleteCustomer.click();
-        elements.alertDeleteBtn.click();
+        Actions actions = new Actions(driver);
+        actions.scrollToElement(elements.editBolumu).perform();
+        WebElement editButonu = getEditButtonByEmail2(email);
+        bekle.until(ExpectedConditions.elementToBeClickable(editButonu));
+        editButonu.click();
+        elements.customerDelete.click();
+        MyFunc.bekle(1);
+        elements.alertButton.click();
 
         bekle.until(ExpectedConditions.urlContains("https://admin-demo.nopcommerce.com/Admin/Customer/List"));
         bekle.until(ExpectedConditions.visibilityOf(elements.deleteSuccess));
@@ -144,6 +142,13 @@ public class Testler extends BaseDriver {
         String deleteMesaj = elements.deleteSuccess.getText();
         Assert.assertTrue(deleteMesaj.contains("The customer has been deleted successfully."),
                 "Müşteri silme işlemi başarısız oldu!.. Geçmiş olsun...  Gelen Mesaj: " + deleteMesaj);
+
+    }
+
+    public WebElement getEditButtonByEmail2(String email) {
+        String dinamikXpath = String.format
+                ("//table[@id='customers-grid']//td[text()='%s']/following-sibling::td[@class='button-column']/a", email);
+        return driver.findElement(By.xpath(dinamikXpath));
 
 
     }
@@ -154,5 +159,5 @@ public class Testler extends BaseDriver {
 //        BekleKapat();
 //        KalanOncekileriKapat();
     }
-
 }
+
