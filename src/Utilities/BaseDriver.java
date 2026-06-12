@@ -16,9 +16,9 @@ import java.time.Duration;
 import java.util.List;
 
 public class BaseDriver {
-    public  WebDriver driver ;
+    public WebDriver driver;
 
-    public  WebDriverWait bekle;
+    public WebDriverWait bekle;
 
 //    public WebDriver getDriver() {              // 2. yöntem
 //        return driver;

@@ -1,7 +1,5 @@
 package Tests;
 
-import Utilities.BaseDriver;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,12 +21,12 @@ public class Elements {
     @FindBy(xpath = "//h1[contains(text(),'Dashboard')]")
     public WebElement dashboard;
 
-    // LawMenuTest (toktay)
+    // LawMenuTest (Tuğçe)
     @FindBy(xpath = "//ul[@class='nav nav-pills nav-sidebar flex-column nav-legacy']/li[@class='nav-item has-treeview']")
     public List<WebElement> anaMenuList;
 
-    // CreateCustomerTest (zeynep)
-    @FindBy(linkText = "Customers") // xpath--> //p[contains(text(),'Customers')] [1]
+    // CreateCustomerTest (Zeynep)
+    @FindBy(linkText = "Customers")
     public WebElement customers;
     @FindBy(xpath = "/html/body/div[3]/aside/div/nav/ul/li[4]/ul/li[1]/a")
     public WebElement customerList;
@@ -47,10 +45,41 @@ public class Elements {
     @FindBy(xpath = "//*[@id='admin-notifications']/div")
     public WebElement customerSucces;
 
-    //search Test
-    @FindBy(xpath = "//input[@type='text']") public WebElement searchBox;
-    @FindBy(xpath = "//*[@id='search-box']/span/div") public WebElement searchBox2;
-    @FindBy(xpath = "//h1[normalize-space()='Shipments']") public WebElement shipmentsTitle;
+    // EditCustomerTest (Sevgi)
+    @FindBy(id = "SearchEmail")
+    public WebElement searchEmail;
+    @FindBy(id = "SearchFirstName")
+    public WebElement searchFirstName;
+    @FindBy(id = "SearchLastName")
+    public WebElement searchLastName;
+    @FindBy(id = "search-customers")
+    public WebElement searchButton;
+    @FindBy(name = "save")
+    public WebElement saveEditButton;
+    @FindBy(xpath = "//div[@class='documentation-reference']//span[1]")
+    public WebElement editBolumu;
+
+
+    // DeleteCustomerTest (Burak)
+    @FindBy(xpath = "//span[@id='customer-delete']")
+    public WebElement customerDelete;
+    @FindBy(xpath = "//button[@type='submit' and contains(text(), 'Delete')]")
+    public WebElement alertButton;
+    @FindBy(xpath = "//*[@id='admin-notifications']/div")
+    public WebElement deleteSuccess;
+
+    // SearchTest (Yigit)
+    @FindBy(xpath = "//input[@type='text']")
+    public WebElement searchBox;
+    @FindBy(xpath = "//*[@id='search-box']/span/div")
+    public WebElement searchBox2;
+    @FindBy(xpath = "//h1[normalize-space()='Shipments']")
+    public WebElement shipmentsTitle;
+
+
+
+
+
 
 
 }

@@ -3,25 +3,22 @@ package Tests;
 import Utilities.BaseDriver;
 import Utilities.MyFunc;
 import com.github.javafaker.Faker;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.security.Key;
 import java.util.List;
 
 public class Testler extends BaseDriver {
-
+//    Elements elements = new Elements(driver); --> bu şekilde çalışmıyor
 
     @Test(priority = 1)
     public void LoginTest() {
         Elements elements = new Elements(driver);
         elements.loginButton.click();
-        MyFunc.bekle(5); // sayfanın yüklenmesi için bekle, yoksa hata veriyor
+        MyFunc.bekle(5); // sayfanın yüklenmesi için (BOT) bekle, yoksa hata veriyor
         bekle.until(ExpectedConditions.visibilityOf(elements.dashboard));
         Assert.assertEquals(elements.dashboard.getText().trim(), "Dashboard", "login başarısız.");
     }
@@ -54,7 +51,7 @@ public class Testler extends BaseDriver {
     @Test(dependsOnMethods = {"LeftNawMenuTest"})
     public void CreateCustomerTest() { // zeynep
         Faker randomUreteci = new Faker();
-        firstName = randomUreteci.name().firstName(); // address yerine name daha doğru olur
+        firstName = randomUreteci.name().firstName();
         lastName = randomUreteci.name().lastName();
         email = randomUreteci.internet().emailAddress();
         password = randomUreteci.internet().password();
@@ -63,7 +60,7 @@ public class Testler extends BaseDriver {
         elements.customers.click();
         elements.customerList.click();
         elements.addNewButton.click();
-        elements.email.sendKeys(email);//faker kullanmamız lazım
+        elements.email.sendKeys(email);
         elements.password.sendKeys(password);
         elements.firstName.sendKeys(firstName);
         elements.lastName.sendKeys(lastName);
@@ -87,13 +84,11 @@ public class Testler extends BaseDriver {
         elements.searchButton.click();
         Actions actions = new Actions(driver);
         actions.scrollToElement(elements.editBolumu).perform();
-        MyFunc.bekle(5);
-
+        MyFunc.bekle(5); // -> sayfanın aşağıya kaydırılması için oluşturuldu, wait ile denendi hata veriyor.
         WebElement dogrulanacakElement = getSearchDogrulama(email);
         bekle.until(ExpectedConditions.visibilityOf(dogrulanacakElement));
-        Assert.assertTrue(dogrulanacakElement.isDisplayed(), "Faker ile üretilen email tabloda görünmüyor!");
-        Assert.assertEquals(dogrulanacakElement.getText(), email, "Tablodaki metin üretilen email ile eşleşmiyor!");
-        System.out.println("Başarıyla Doğrulanan Faker Email'i: " + email);
+        Assert.assertTrue(dogrulanacakElement.isDisplayed(), "Faker ile oluşturulan email, tabloda görünmüyor!");
+        Assert.assertEquals(dogrulanacakElement.getText(), email, "Tablodaki email, oluşturulan email ile eşleşmiyor!");
 
         WebElement editButonu = getEditButtonByEmail(email);
         bekle.until(ExpectedConditions.elementToBeClickable(editButonu));
@@ -108,9 +103,9 @@ public class Testler extends BaseDriver {
         Assert.assertTrue(gelenMesaj.contains("The customer has been updated successfully."),
                 "Müşteri güncelleme mesajı hatalı! Gelen Mesaj: " + gelenMesaj);
 
-        System.out.println("Müşteri Başarıyla Güncellendi ve Doğrulandı!");
 
     }
+
     public WebElement getSearchDogrulama(String email) { // Faker doğrulama için yapıldı.
         String dinamikXpath = String.format("//table[@id='customers-grid']//td[text()='%s']", email);
         return driver.findElement(By.xpath(dinamikXpath));
@@ -120,9 +115,7 @@ public class Testler extends BaseDriver {
         String dinamikXpath = String.format
                 ("//table[@id='customers-grid']//td[text()='%s']/following-sibling::td[@class='button-column']/a", email);
         return driver.findElement(By.xpath(dinamikXpath));
-
     }
-
 
     @Test(dependsOnMethods = {"EditCustomerTest"})
     public void DeleteCustomerTest() { // burak
@@ -133,38 +126,33 @@ public class Testler extends BaseDriver {
         bekle.until(ExpectedConditions.elementToBeClickable(editButonu));
         editButonu.click();
         elements.customerDelete.click();
-        MyFunc.bekle(1);
+        bekle.until(ExpectedConditions.elementToBeClickable(elements.alertButton));
         elements.alertButton.click();
-
         bekle.until(ExpectedConditions.urlContains("https://admin-demo.nopcommerce.com/Admin/Customer/List"));
         bekle.until(ExpectedConditions.visibilityOf(elements.deleteSuccess));
 
         String deleteMesaj = elements.deleteSuccess.getText();
         Assert.assertTrue(deleteMesaj.contains("The customer has been deleted successfully."),
                 "Müşteri silme işlemi başarısız oldu!.. Geçmiş olsun...  Gelen Mesaj: " + deleteMesaj);
-
     }
 
-    @Test//(dependsOnMethods = {"DeleteCustomerTest"})
-    public void SearchTest() { // yiğit
-
-        Elements elements = new Elements(driver);
-        elements.loginButton.click();
-        MyFunc.bekle(10);
-        bekle.until(ExpectedConditions.visibilityOf(elements.dashboard));
-        elements.searchBox.sendKeys("Shipments");
-        elements.searchBox2.click();
-        String baslik = elements.shipmentsTitle.getText();
-        Assert.assertTrue(baslik.contains("Shipments"),"arama basarısı oldu");
-
-
+    public WebElement getEditButtonByEmail2(String email) {
+        String dinamikXpath = String.format
+                ("//table[@id='customers-grid']//td[text()='%s']/following-sibling::td[@class='button-column']/a", email);
+        return driver.findElement(By.xpath(dinamikXpath));
     }
 
     @Test(dependsOnMethods = {"DeleteCustomerTest"})
     public void SearchTest() { // yiğit
 
-//        BekleKapat();
-//        KalanOncekileriKapat();
+        Elements elements = new Elements(driver);
+        elements.searchBox.sendKeys("Shipments");
+        elements.searchBox2.click();
+        String baslik = elements.shipmentsTitle.getText();
+        Assert.assertTrue(baslik.contains("Shipments"), "arama basarısız oldu");
+        BekleKapat();
+        KalanOncekileriKapat();
+
     }
 }
 
