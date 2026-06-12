@@ -24,69 +24,42 @@ public class Testler extends BaseDriver {
         MyFunc.bekle(5); // sayfanın yüklenmesi için bekle, yoksa hata veriyor
         bekle.until(ExpectedConditions.visibilityOf(elements.dashboard));
         Assert.assertEquals(elements.dashboard.getText().trim(), "Dashboard", "login başarısız.");
-//        BekleKapat();
-//        KalanOncekileriKapat();
     }
 
     @Test(dependsOnMethods = {"LoginTest"})
-    public void LeftNawMenuTest() {
+    public void LeftNawMenuTest() { // tuğçe
         Elements elements = new Elements(driver);
-        Actions actions = new Actions(driver);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
 
-        for (int i = 0; i < elements.anaMenuler.size(); i++) {
-            WebElement menuBlock = elements.anaMenuler.get(i);
-
-            // Görünmeyen, boyutu sıfır olan gizli elementleri pas geçiyoruz (Hata almayı engeller)
-            if (!menuBlock.isDisplayed()) {
-                continue;
+        for (WebElement e : elements.anaMenuList) {
+            e.click();
+            WebElement menuAdi = e.findElement(By.xpath("a/p"));
+            try {
+                bekle.until(ExpectedConditions.attributeContains(e, "class", "menu-open"));
+            } catch (TimeoutException ex) {
+                Assert.fail(menuAdi.getText() + " menüsünü açma başarısız oldu.");
             }
-
-            WebElement menuLink = menuBlock.findElement(By.tagName("a"));
-            String menuName = menuLink.getText().trim();
-
-            // Eğer başlık boş kalmışsa veya Dashboard ise atla
-            if (menuName.isEmpty() || menuName.equalsIgnoreCase("Dashboard")) {
-                continue;
-            }
-
-            System.out.println("Kontrol Edilen Menü: " + menuName);
-
-            // Hover ve Tıklama aksiyonu
-            actions.moveToElement(menuLink).click().build().perform();
-
-            Assert.assertTrue(menuLink.isDisplayed(), menuName + " görünür değil!");
-
-            // Sadece o ana menüye ait alt elemanları listeler
-            List<WebElement> altMenuler = menuBlock.findElements(By.cssSelector("ul.nav-treeview > li"));
-
-            System.out.println(menuName + " altındaki eleman sayısı: " + altMenuler.size());
-            for (WebElement sub : altMenuler) {
-                String subText = sub.getText().trim();
-                // Eğer alt eleman metni boş değilse yazdır
-                if (!subText.isEmpty()) {
-                    System.out.println("  -> Alt Eleman: " + subText);
-                }
-            }
-
-            Assert.assertTrue(altMenuler.size() > 0, menuName + " altında eleman bulunamadı!");
-            System.out.println(menuName + " başarıyla doğrulandı.\n------------------");
+            js.executeScript("arguments[0].scrollIntoView(true);", e);
+            List<WebElement> li = e.findElements(By.xpath("ul/li"));
+            Assert.assertTrue(!li.isEmpty(), menuAdi.getText() + " altında menü bulunamadı.");
         }
-//        BekleKapat();
-//        KalanOncekileriKapat();
     }
 
 
-    Faker randomUreteci = new Faker();
-    String firstName = randomUreteci.address().firstName();
-    String lastName = randomUreteci.address().lastName();
-    String email = randomUreteci.internet().emailAddress();
-    String password = randomUreteci.internet().password();
+    public String firstName;
+    public String lastName;
+    public String email;
+    public String password;
 
-    @Test()
-    public void CreateCustomerTest() {
+    @Test(dependsOnMethods = {"LeftNawMenuTest"})
+    public void CreateCustomerTest() { // zeynep
+        Faker randomUreteci = new Faker();
+        firstName = randomUreteci.name().firstName(); // address yerine name daha doğru olur
+        lastName = randomUreteci.name().lastName();
+        email = randomUreteci.internet().emailAddress();
+        password = randomUreteci.internet().password();
+
         Elements elements = new Elements(driver);
-        elements.loginButton.click();
-        MyFunc.bekle(10);
         elements.customers.click();
         elements.customerList.click();
         elements.addNewButton.click();
@@ -106,14 +79,69 @@ public class Testler extends BaseDriver {
 
 
     @Test(dependsOnMethods = {"CreateCustomerTest"})
-    public void EditCustomerTest() { // yiğit
+    public void EditCustomerTest() { // sevgi
+        Elements elements = new Elements(driver);
+        elements.searchEmail.sendKeys(email);
+        elements.searchFirstName.sendKeys(firstName);
+        elements.searchLastName.sendKeys(lastName);
+        elements.searchButton.click();
+        Actions actions = new Actions(driver);
+        actions.scrollToElement(elements.editBolumu).perform();
+        MyFunc.bekle(5);
 
+        WebElement dogrulanacakElement = getSearchDogrulama(email);
+        bekle.until(ExpectedConditions.visibilityOf(dogrulanacakElement));
+        Assert.assertTrue(dogrulanacakElement.isDisplayed(), "Faker ile üretilen email tabloda görünmüyor!");
+        Assert.assertEquals(dogrulanacakElement.getText(), email, "Tablodaki metin üretilen email ile eşleşmiyor!");
+        System.out.println("Başarıyla Doğrulanan Faker Email'i: " + email);
+
+        WebElement editButonu = getEditButtonByEmail(email);
+        bekle.until(ExpectedConditions.elementToBeClickable(editButonu));
+        editButonu.click();
+        elements.firstName.clear();
+        elements.firstName.sendKeys("Anabelle");
+        elements.saveEditButton.click();
+
+        bekle.until(ExpectedConditions.urlContains("https://admin-demo.nopcommerce.com/Admin/Customer/List"));
+        bekle.until(ExpectedConditions.visibilityOf(elements.customerSucces));
+        String gelenMesaj = elements.customerSucces.getText();
+        Assert.assertTrue(gelenMesaj.contains("The customer has been updated successfully."),
+                "Müşteri güncelleme mesajı hatalı! Gelen Mesaj: " + gelenMesaj);
+
+        System.out.println("Müşteri Başarıyla Güncellendi ve Doğrulandı!");
+
+    }
+    public WebElement getSearchDogrulama(String email) { // Faker doğrulama için yapıldı.
+        String dinamikXpath = String.format("//table[@id='customers-grid']//td[text()='%s']", email);
+        return driver.findElement(By.xpath(dinamikXpath));
+    }
+
+    public WebElement getEditButtonByEmail(String email) {
+        String dinamikXpath = String.format
+                ("//table[@id='customers-grid']//td[text()='%s']/following-sibling::td[@class='button-column']/a", email);
+        return driver.findElement(By.xpath(dinamikXpath));
 
     }
 
+
     @Test(dependsOnMethods = {"EditCustomerTest"})
     public void DeleteCustomerTest() { // burak
+        Elements elements = new Elements(driver);
+        Actions actions = new Actions(driver);
+        actions.scrollToElement(elements.editBolumu).perform();
+        WebElement editButonu = getEditButtonByEmail2(email);
+        bekle.until(ExpectedConditions.elementToBeClickable(editButonu));
+        editButonu.click();
+        elements.customerDelete.click();
+        MyFunc.bekle(1);
+        elements.alertButton.click();
 
+        bekle.until(ExpectedConditions.urlContains("https://admin-demo.nopcommerce.com/Admin/Customer/List"));
+        bekle.until(ExpectedConditions.visibilityOf(elements.deleteSuccess));
+
+        String deleteMesaj = elements.deleteSuccess.getText();
+        Assert.assertTrue(deleteMesaj.contains("The customer has been deleted successfully."),
+                "Müşteri silme işlemi başarısız oldu!.. Geçmiş olsun...  Gelen Mesaj: " + deleteMesaj);
 
     }
 
@@ -131,4 +159,12 @@ public class Testler extends BaseDriver {
 
 
     }
+
+    @Test(dependsOnMethods = {"DeleteCustomerTest"})
+    public void SearchTest() { // yiğit
+
+//        BekleKapat();
+//        KalanOncekileriKapat();
+    }
 }
+

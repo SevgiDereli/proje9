@@ -1,5 +1,7 @@
 package Tests;
 
+import Utilities.BaseDriver;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,26 +11,24 @@ import java.util.List;
 
 public class Elements {
     public Elements(WebDriver driver) {
-        PageFactory.initElements(driver, this);         // paralel ve parametrik...
-    }
+        PageFactory.initElements(driver, this); }
 
+    // LoginTest
     @FindBy(id = "Email")
     public WebElement email;
     @FindBy(id = "Password")
     public WebElement password;
     @FindBy(css = "button[type='submit']")
     public WebElement loginButton;
-
-    // sevgi
     @FindBy(xpath = "//h1[contains(text(),'Dashboard')]")
     public WebElement dashboard;
 
-    // Sadece en dıştaki ana menü bloklarını seçer (İçteki alt menülerin li'lerini listeye karıştırmaz)
-    @FindBy(css = "ul[role='menu'] > li.nav-item.has-treeview")
-    public List<WebElement> anaMenuler;
+    // LawMenuTest (toktay)
+    @FindBy(xpath = "//ul[@class='nav nav-pills nav-sidebar flex-column nav-legacy']/li[@class='nav-item has-treeview']")
+    public List<WebElement> anaMenuList;
 
-    //zeynep ben
-    @FindBy(linkText = "Customers")
+    // CreateCustomerTest (zeynep)
+    @FindBy(linkText = "Customers") // xpath--> //p[contains(text(),'Customers')] [1]
     public WebElement customers;
     @FindBy(xpath = "/html/body/div[3]/aside/div/nav/ul/li[4]/ul/li[1]/a")
     public WebElement customerList;
@@ -54,3 +54,4 @@ public class Elements {
 
 
 }
+

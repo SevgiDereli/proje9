@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<suite name="Proje 9 Paralel Test " parallel="tests" thread-count="2">
+
+    <test name="Chrome Testler">
+        <parameter name="browser" value="chrome" />
+        <classes>
+            <class name="Tests.Testler" />
+        </classes>
+    </test>
+
+    <test name="Firefox Testler">
+        <parameter name="browser" value="firefox" />
+        <classes>
+            <class name="Tests.Testler" />
+        </classes>
+    </test>
+
+</suite>
