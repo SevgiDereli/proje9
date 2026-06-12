@@ -47,27 +47,10 @@ public class Elements {
     @FindBy(xpath = "//*[@id='admin-notifications']/div")
     public WebElement customerSucces;
 
-    // EditCustomerTest (Sevgi)
-    @FindBy(id = "SearchEmail")
-    public WebElement searchEmail;
-    @FindBy(id = "SearchFirstName")
-    public WebElement searchFirstName;
-    @FindBy(id = "SearchLastName")
-    public WebElement searchLastName;
-    @FindBy(id = "search-customers")
-    public WebElement searchButton;
-    @FindBy(name = "save")
-    public WebElement saveEditButton;
-    @FindBy(xpath = "//div[@class='documentation-reference']//span[1]")
-    public WebElement editBolumu;
-
-    // DeleteCustomerTest (Burak)
-    @FindBy(xpath = "//span[@id='customer-delete']")
-    public WebElement customerDelete;
-    @FindBy(xpath = "//button[@type='submit' and contains(text(), 'Delete')]")
-    public WebElement alertButton;
-    @FindBy(xpath = "//*[@id='admin-notifications']/div")
-    public WebElement deleteSuccess;
+    //search Test
+    @FindBy(xpath = "//input[@type='text']") public WebElement searchBox;
+    @FindBy(xpath = "//*[@id='search-box']/span/div") public WebElement searchBox2;
+    @FindBy(xpath = "//h1[normalize-space()='Shipments']") public WebElement shipmentsTitle;
 
 
 }
